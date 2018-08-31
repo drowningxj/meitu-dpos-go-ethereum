@@ -6,27 +6,27 @@
         "byzantiumBlock":0,
         "dpos":{
             "validators":[
-                "0x52453fe215a7ef77b1cf7761ec54b336d02727df",
-                "0xa60a3886b552ff9992cfcd208ec1152079e046c2",
-                "0xab2e146f1e261cb42038fdd672d035dd1e002c78",
-                "0xb040353ec0f2c113d5639444f7253681aecda1f8",
-                "0x14432e15f21237013017fa6ee90fc99433dec82c",
-                "0x9f30d0e5c9c88cade54cd1adecf6bc2c7e0e5af6",
-                "0xd83b44a3719720ec54cdb9f54c0202de68f1ebcb",
-                "0x56cc452e450551b7b9cffe25084a069e8c1e9441",
-                "0xbcfcb3fa8250be4f2bf2b1e70e1da500c668377b",
-                "0x9d9667c71bb09d6ca7c3ed12bfe5e7be24e2ffe1",
-                "0xabde197e97398864ba74511f02832726edad5967",
-                "0x6f99d97a394fa7a623fdf84fdc7446b99c3cb335",
-                "0xf78b011e639ce6d8b76f97712118f3fe4a12dd95",
-                "0x8db3b6c801dddd624d6ddc2088aa64b5a2493661",
-                "0x751b484bd5296f8d267a8537d33f25a848f7f7af",
-                "0x646ba1fa42eb940aac67103a71e9a908ef484ec3",
-                "0x34d4a8d9f6b53a8f5e674516cb8ad66c843b2801",
-                "0x5b76fff970bf8a351c1c9ebfb5e5a9493e956ddd",
-                "0x8da3c5aedaf106c61cfee6d8483e1f255fdd60c0",
-                "0x2cdbe87a1bd7ee60dd6fe97f7b2d1efbacd5d95d",
-                "0x743415d0e979dc6e426bc8189e40beb65bf5ac1d"
+                "0x887cff02fa3c44adf33f4e283c7c53b571948d61",
+                "0xca738809ec4ded895c97f1927fe2999640c9eb9a",
+                "0x35520168025ad9e2fdb91bd22ea360b2d4e85e44",
+                "0x66be9a8aee70c4902316a84dded2b89d78b2fe80",
+                "0xa98bb51a447c6b5f28ef5ae52cefef876e7cd8cd",
+                "0x48d74e21a659e996fd9a22da933b977116501a95",
+                "0xb28d9dd09e389de5db5ac7ff65cfb85bc79908f2",
+                "0x04fcbfc5ff6ef5af646660e07044a0795bd96b62",
+                "0x2371030431e3a51eb52312f6e144378d39ce6eaa",
+                "0xd1dd7c60f94fabdfc7e77e7c1017aa99e2352f55",
+                "0xfbd70c852600dbc6816a85eae063b892af88f443",
+                "0x09855dc82f18a63237ba77e9cec28643ba97a820",
+                "0x8d57f4c7546cab4e547e06e5b831d788e0b220ca",
+                "0xfda1c2567c3bc41ab05c96aa4720120a45e807a7",
+                "0x968372e7683ae6d6613035c3145f2691ca971a4b",
+                "0xe19e73ff306ba995bd1a9579098760aca349fd5c",
+                "0x77f6e339f902d00a005f4392d47fc4f6a2c6ac16",
+                "0x55dac4095e0a27207513bd9e2154c656eda70831",
+                "0xef5c8bd20cc14be3cf870e46fa73282eb22767e3",
+                "0x717785166caee17c9dbb0e81b3b4b492225324ae",
+                "0x9ac9319ed7e0445cb5283986acbec35ae3903c05"
             ]
         }
     },
@@ -38,5 +38,5 @@
     "parentHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "extraData": "0x11bbe8db4e347b4e8c937c1c8370e4b5ed33adb3db69cbdb7a38e1e50b1b82fa",
     "gasLimit": "0x500000",
-    "alloc": {}
+    "alloc": {"0x887cff02fa3c44adf33f4e283c7c53b571948d61": { "balance": "30000000000000000000000" }}
 }

@@ -1,5 +1,11 @@
 package types
 
+//
+//
+// Dpos算法上下文
+// 包含（存储的数据结构、对数据结构操作）
+// 例如：踢出某个验证人、获取所有验证人、设置验证人集合 等
+//
 import (
 	"bytes"
 	"errors"
@@ -13,15 +19,16 @@ import (
 )
 
 type DposContext struct {
-	epochTrie     *trie.Trie
-	delegateTrie  *trie.Trie
-	voteTrie      *trie.Trie
-	candidateTrie *trie.Trie
-	mintCntTrie   *trie.Trie
+	epochTrie     *trie.Trie //记录每个周期的验证人列表
+	delegateTrie  *trie.Trie //记录验证人对应投票人的列表
+	voteTrie      *trie.Trie //记录投票人对应验证人(一个投票者可以投多个验证人)
+	candidateTrie *trie.Trie //记录候选人列表
+	mintCntTrie   *trie.Trie //(出块较少在下个周期踢出)
 
 	db ethdb.Database
 }
 
+//在Trie中的前缀
 var (
 	epochPrefix     = []byte("epoch-")
 	delegatePrefix  = []byte("delegate-")
@@ -238,6 +245,7 @@ func (d *DposContext) KickoutCandidate(candidateAddr common.Address) error {
 }
 
 func (d *DposContext) BecomeCandidate(candidateAddr common.Address) error {
+	//更新候选人列表
 	candidate := candidateAddr.Bytes()
 	return d.candidateTrie.TryUpdate(candidate, candidate)
 }
@@ -246,6 +254,7 @@ func (d *DposContext) Delegate(delegatorAddr, candidateAddr common.Address) erro
 	delegator, candidate := delegatorAddr.Bytes(), candidateAddr.Bytes()
 
 	// the candidate must be candidate
+	// 投票前需要检查该账号是否是候选人
 	candidateInTrie, err := d.candidateTrie.TryGet(candidate)
 	if err != nil {
 		return err
@@ -255,6 +264,7 @@ func (d *DposContext) Delegate(delegatorAddr, candidateAddr common.Address) erro
 	}
 
 	// delete old candidate if exists
+	// 投票前若给其他人投过，则取消
 	oldCandidate, err := d.voteTrie.TryGet(delegator)
 	if err != nil {
 		if _, ok := err.(*trie.MissingNodeError); !ok {
@@ -264,6 +274,7 @@ func (d *DposContext) Delegate(delegatorAddr, candidateAddr common.Address) erro
 	if oldCandidate != nil {
 		d.delegateTrie.Delete(append(oldCandidate, delegator...))
 	}
+	//更新候选人对应的授权列表
 	if err = d.delegateTrie.TryUpdate(append(candidate, delegator...), delegator); err != nil {
 		return err
 	}

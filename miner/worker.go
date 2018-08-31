@@ -199,10 +199,19 @@ func (self *worker) start() {
 	defer self.mu.Unlock()
 
 	atomic.StoreInt32(&self.mining, 1)
+	// 此处是原以太坊代码
+	// spin up agents
+	//for agent := range self.agents {
+	//	agent.Start()
+	//}
+
+	//此处是DPOS增加代码，调用循环挖矿
 	go self.mintLoop()
 }
 
+//美图 新加方法，用于DPOS挖矿
 func (self *worker) mintBlock(now int64) {
+	//Dpos强制转换成 consensus.Engine
 	engine, ok := self.engine.(*dpos.Dpos)
 	if !ok {
 		log.Error("Only the dpos engine was allowed")
@@ -235,6 +244,7 @@ func (self *worker) mintBlock(now int64) {
 	self.recv <- &Result{work, result}
 }
 
+//用于DPOS循环挖矿
 func (self *worker) mintLoop() {
 	ticker := time.NewTicker(time.Second).C
 	for {
@@ -384,6 +394,7 @@ func (self *worker) makeCurrent(parent *types.Block, header *types.Header) error
 	return nil
 }
 
+//美图：提交新的工作（以太坊：commitNewWork）
 func (self *worker) createNewWork() (*Work, error) {
 	self.mu.Lock()
 	defer self.mu.Unlock()

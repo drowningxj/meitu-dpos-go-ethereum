@@ -9,6 +9,7 @@ import (
 	"sync"
 	"time"
 
+	lru "github.com/hashicorp/golang-lru"
 	"github.com/meitu/go-ethereum/accounts"
 	"github.com/meitu/go-ethereum/common"
 	"github.com/meitu/go-ethereum/consensus"
@@ -23,7 +24,6 @@ import (
 	"github.com/meitu/go-ethereum/rlp"
 	"github.com/meitu/go-ethereum/rpc"
 	"github.com/meitu/go-ethereum/trie"
-	lru "github.com/hashicorp/golang-lru"
 )
 
 const (
@@ -239,21 +239,25 @@ func (d *Dpos) verifySeal(chain consensus.ChainReader, header *types.Header, par
 	} else {
 		parent = chain.GetHeader(header.ParentHash, number-1)
 	}
+	//从db中获取dpos上下文数据
 	dposContext, err := types.NewDposContextFromProto(d.db, parent.DposContext)
 	if err != nil {
 		return err
 	}
 	epochContext := &EpochContext{DposContext: dposContext}
+	//算法：根据头部时间获取验证者
 	validator, err := epochContext.lookupValidator(header.Time.Int64())
 	if err != nil {
 		return err
 	}
+	//判断 头部获取验证者、算出来的验证者是否一致
 	if err := d.verifyBlockSigner(validator, header); err != nil {
 		return err
 	}
 	return d.updateConfirmedBlockHeader(chain)
 }
 
+//验证validator是否和头部的singer一致
 func (d *Dpos) verifyBlockSigner(validator common.Address, header *types.Header) error {
 	signer, err := ecrecover(header, d.signatures)
 	if err != nil {
@@ -385,6 +389,7 @@ func (d *Dpos) Finalize(chain consensus.ChainReader, header *types.Header, state
 	//update mint count trie
 	updateMintCnt(parent.Time.Int64(), header.Time.Int64(), header.Validator, dposContext)
 	header.DposContext = dposContext.ToProto()
+	log.Info("======types.NewBlock=======")
 	return types.NewBlock(header, txs, uncles, receipts), nil
 }
 
@@ -470,6 +475,7 @@ func (d *Dpos) Authorize(signer common.Address, signFn SignerFn) {
 }
 
 // ecrecover extracts the Ethereum account address from a signed header.
+// 从签名的头中获取以太坊地址
 func ecrecover(header *types.Header, sigcache *lru.ARCCache) (common.Address, error) {
 	// If the signature's already cached, return that
 	hash := header.Hash()
